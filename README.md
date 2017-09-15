@@ -1,7 +1,7 @@
 # fastify-response-time
 
 [![Build Status](https://travis-ci.org/lolo32/fastify-response-time.svg?branch=master)](https://travis-ci.org/lolo32/fastify-response-time)
-[![Coverage Status](https://coveralls.io/repos/github/lolo32/fastify-reponse-time/badge.svg)](https://coveralls.io/github/lolo32/fastify-response-time)
+[![Coverage Status](https://coveralls.io/repos/github/lolo32/fastify-response-time/badge.svg?branch=master)](https://coveralls.io/github/lolo32/fastify-response-time?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/lolo32/fastify-response-time/badge.svg)](https://snyk.io/test/github/lolo32/fastify-response-time)
 
 Add X-Response-Time header at each request for Fastify. The unit used is milliseconds.
