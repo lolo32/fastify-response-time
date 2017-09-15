@@ -1,0 +1,36 @@
+{
+  "name": "fastify-response-time",
+  "version": "1.0.0",
+  "description": "Execute a listener when a response is about to write headers for Fastify",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test.js --coverage --100",
+    "test:coverage": "tap test.js --coverage --100 --coverage-report=html"
+  },
+  "bugs": {
+    "url": "https://github.com/lolo32/fastify-onheader/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lolo32/fastify-onheader.git"
+  },
+  "homepage": "https://github.com/lolo32/fastify-onheader.git#readme",
+  "author": "Lolo_32",
+  "license": "ISC",
+  "keywords": [
+    "Fastify",
+    "on-header",
+    "headers",
+    "onheaders",
+    "event"
+  ],
+  "devDependencies": {
+    "fastify": "^0.26.2",
+    "request": "^2.81.0",
+    "tap": "^10.7.2"
+  },
+  "dependencies": {
+    "fastify-plugin": "^0.1.0",
+    "on-headers": "^1.0.1"
+  }
+}
