@@ -1,6 +1,6 @@
 {
   "name": "fastify-response-time",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Add X-Response-Time header at each request (in ms) for Fastify",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/lolo32/fastify-response-time.git#readme",
   "author": "Lolo_32",
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [
     "Fastify",
     "on-header",
