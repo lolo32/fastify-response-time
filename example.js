@@ -3,14 +3,13 @@
 const fastify = require("fastify")();
 
 fastify.register(require("./index"), (err) => {
-  if (err) {
-    throw err;
-  }
-});
-const startTime = Symbol("startTime");
+    if (err) {
+      throw err;
+    }
+  });
 
 fastify.get("/", (request, reply) => {
-  reply.send({hello: "world"});
+    reply.send({hello: "world"});
 });
 
 fastify.listen(3000, (err) => {

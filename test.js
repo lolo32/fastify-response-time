@@ -73,3 +73,44 @@ test("reply.send add x-response-time header representing duration", (t) => {
     });
   });
 });
+
+test("The digit and header option is correctly used", (t) => {
+  t.plan(9);
+
+  const data = {hello: "world"};
+  const headerName = "X-My-Timer";
+  const digits = 0;
+
+  const fastify = fastifyModule();
+  fastify.register(fastifyRequestTime, {
+      digits: digits,
+      header: headerName
+    },
+    (err) => {
+      t.error(err);
+    });
+
+  fastify.get("/", (request, reply) => {
+    reply.send(data);
+  });
+
+  fastify.listen(0, (err) => {
+    t.error(err);
+
+    request({
+      method: "GET",
+      uri: `http://localhost:${fastify.server.address().port}`
+    }, (err, response, body) => {
+      t.error(err);
+      t.strictEqual(response.statusCode, 200);
+      t.strictEqual(response.headers["content-length"], `${body.length}`);
+      t.ok(response.headers[headerName.toLowerCase()]);
+      const duration = response.headers[headerName.toLowerCase()];
+      t.ok(duration);
+      t.ok(duration === parseFloat(duration).toFixed(digits));
+      t.deepEqual(JSON.parse(body), data);
+      t.end();
+      fastify.close();
+    });
+  });
+});

@@ -146,7 +146,6 @@ module.exports = {
     "no-lonely-if": "error",
     "no-loop-func": "error",
     "no-magic-numbers": "off",
-    "no-mixed-operators": "error",
     "no-mixed-requires": "error",
     "no-multi-assign": "off",
     "no-multi-spaces": "error",
@@ -207,7 +206,6 @@ module.exports = {
     "no-whitespace-before-property": "error",
     "no-with": "error",
     "nonblock-statement-body-position": "error",
-    "object-curly-newline": "error",
     "object-curly-spacing": [
       "error",
       "never"
@@ -252,9 +250,6 @@ module.exports = {
       "error",
       "last"
     ],
-    "sort-imports": "error",
-    "sort-keys": "error",
-    "sort-vars": "error",
     "space-before-blocks": "error",
     "space-before-function-paren": "off",
     "space-in-parens": [

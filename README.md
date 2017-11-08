@@ -48,3 +48,10 @@ Both examples responds with:
     < Date: Fri, 15 Sep 2017 21:14:33 GMT
     < Connection: keep-alive
     <
+
+## Options
+
+This plugin allow you to specify options:
+
+- `header` can be used to change default header name to something else _(`X-Response-Time` by default)_
+- `digits` to specify the number of digits in the response _(`2` by default, so 1.03)_
