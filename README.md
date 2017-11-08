@@ -4,8 +4,11 @@
 [![Coverage Status](https://coveralls.io/repos/github/lolo32/fastify-response-time/badge.svg?branch=master)](https://coveralls.io/github/lolo32/fastify-response-time?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/lolo32/fastify-response-time/badge.svg)](https://snyk.io/test/github/lolo32/fastify-response-time)
 
-Add X-Response-Time header at each request for Fastify. The unit used is milliseconds.
+Add `X-Response-Time` header at each request for Fastify. The unit used is milliseconds.
 
+**You need to use Fastify version 0.31 or newer, the hook used (onSend) was added in this version**
+
+_If you need older Fastify version, use version 1.0.1 of this plugin_
 
 ## Install
 
