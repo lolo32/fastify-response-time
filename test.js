@@ -14,7 +14,8 @@ test("reply.send automatically add x-response-time header", (t) => {
   const data = {hello: "world"};
 
   const fastify = fastifyModule();
-  fastify.register(fastifyRequestTime, (err) => {
+  fastify.register(fastifyRequestTime);
+  fastify.after((err) => {
     t.error(err);
   });
 
@@ -47,7 +48,8 @@ test("reply.send add x-response-time header representing duration", (t) => {
   const data = {hello: "world"};
 
   const fastify = fastifyModule();
-  fastify.register(fastifyRequestTime, (err) => {
+  fastify.register(fastifyRequestTime);
+  fastify.after((err) => {
     t.error(err);
   });
 
@@ -85,10 +87,10 @@ test("The digit and header option is correctly used", (t) => {
   fastify.register(fastifyRequestTime, {
       digits: digits,
       header: headerName
-    },
-    (err) => {
-      t.error(err);
     });
+  fastify.after((err) => {
+    t.error(err);
+  });
 
   fastify.get("/", (request, reply) => {
     reply.send(data);

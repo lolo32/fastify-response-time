@@ -2,11 +2,12 @@
 
 const fastify = require("fastify")();
 
-fastify.register(require("./index"), (err) => {
-    if (err) {
-      throw err;
-    }
-  });
+fastify.register(require("./index"));
+fastify.after((err) => {
+  if (err) {
+    throw err;
+  }
+});
 
 fastify.get("/", (request, reply) => {
     reply.send({hello: "world"});
