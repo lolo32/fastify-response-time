@@ -3,6 +3,29 @@
 const fastifyPlugin = require("fastify-plugin");
 
 const symbolRequestTime = Symbol("RequestTimer");
+const symbolServerTiming = Symbol("ServerTiming");
+
+/**
+ *
+ * @param {string} name
+ * @param {number|string} duration
+ * @param {string} description
+ * @return {string}
+ */
+const genTick = (name, duration, description) => {
+  let val = name;
+  // Parse duration. If could not be converted to float, does not add it
+  duration = parseFloat(duration);
+  if (!isNaN(duration)) {
+    val += `;dur=${duration}`;
+  }
+  // Parse the description. If empty, doest not add it. If string with space, double quote value
+  if ("string" === typeof description) {
+    val += `;desc=${description.includes(" ") ? `"${description}"` : description}`;
+  }
+
+  return val
+};
 
 /**
  * Decorators
@@ -23,12 +46,20 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   instance.addHook("onRequest", (req, res, next) => {
     // Store the start timer in nanoseconds resolution
     req[symbolRequestTime] = process.hrtime();
+    res[symbolServerTiming] = {};
 
     next();
   });
 
   // Hook to be triggered just before response to be send
   instance.addHook("onSend", (request, reply, payload, next) => {
+
+    // check if Server-Timing need to be added
+    const serverTiming = Object.values(reply.res[symbolServerTiming]);
+    if (serverTiming.length) {
+      reply.header("Server-Timing", serverTiming.join(","));
+    }
+
     // Calculate the duration, in nanoseconds …
     const hrDuration = process.hrtime(request.req[symbolRequestTime]);
     // … convert it to milliseconds …
@@ -39,6 +70,19 @@ module.exports = fastifyPlugin((instance, opts, next) => {
     next();
   });
 
+  // Can be used to add custom timing information
+  instance.decorateReply("setServerTiming", function(name, duration, description) {
+    // Reference to the res object storing values …
+    const serverTiming = this.res[symbolServerTiming];
+    // … return if value already exists (all subsequent occurrences MUST be ignored without signaling an error) …
+    if (serverTiming.hasOwnProperty(name)) {
+      return false;
+    }
+    // … add the value the the list to send later
+    serverTiming[name] = genTick(name, duration, description);
+    // … return true, the value was added to the list
+    return true;
+  });
 
   next();
   // Not before 0.31 (onSend hook added to this version)

@@ -116,3 +116,60 @@ test("The digit and header option is correctly used", (t) => {
     });
   });
 });
+
+test("Check the Server-Timing header", (t) => {
+  t.plan(20);
+
+  const data = {hello: "world"};
+
+  const fastify = fastifyModule();
+  fastify.register(fastifyRequestTime);
+  fastify.after((err) => {
+    t.error(err);
+  });
+
+  fastify.get("/", (request, reply) => {
+    t.ok(reply.setServerTiming, "function .setServerTiming exists on reply");
+    reply.send(data);
+  });
+
+  fastify.get("/timing", (request, reply) => {
+    t.ok(reply.setServerTiming("miss"));
+    t.ok(reply.setServerTiming("db", 53));
+    t.ok(reply.setServerTiming("app", 47.2));
+    t.ok(reply.setServerTiming("dc", null, "atl"));
+    t.ok(reply.setServerTiming("cache", 23.2, "Cache Read"));
+    t.notOk(reply.setServerTiming("db", 150));
+    reply.send(data);
+  });
+
+  fastify.listen(0, (err) => {
+    t.error(err);
+
+    request({
+      method: "GET",
+      uri: `http://localhost:${fastify.server.address().port}`
+    }, (err, response, body) => {
+      t.error(err);
+      t.strictEqual(response.statusCode, 200);
+      t.strictEqual(response.headers["content-length"], `${body.length}`);
+      t.ok(response.headers["x-response-time"]);
+      t.notOk(response.headers["server-timing"]);
+
+      request({
+        method: "GET",
+        uri: `http://localhost:${fastify.server.address().port}/timing`
+      }, (err, response, body) => {
+        t.error(err);
+        t.strictEqual(response.statusCode, 200);
+        t.strictEqual(response.headers["content-length"], `${body.length}`);
+        t.ok(response.headers["x-response-time"]);
+        t.ok(response.headers["server-timing"]);
+        const headers = response.headers["server-timing"];
+        t.equal(headers, "miss,db;dur=53,app;dur=47.2,dc;desc=atl,cache;dur=23.2;desc=\"Cache Read\"");
+        t.end();
+        fastify.close();
+      });
+    });
+  });
+});
