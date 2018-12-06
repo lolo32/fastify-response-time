@@ -24,7 +24,7 @@ const genTick = (name, duration, description) => {
     val += `;desc=${description.includes(" ") ? `"${description}"` : description}`;
   }
 
-  return val
+  return val;
 };
 
 /**
@@ -55,9 +55,13 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   instance.addHook("onSend", (request, reply, payload, next) => {
 
     // check if Server-Timing need to be added
-    const serverTiming = Object.values(reply.res[symbolServerTiming]);
-    if (serverTiming.length) {
-      reply.header("Server-Timing", serverTiming.join(","));
+    const serverTiming = reply.res[symbolServerTiming];
+    const headers = [];
+    for (const name of Object.keys(serverTiming)) {
+      headers.push(serverTiming[name]);
+    }
+    if (headers.length) {
+      reply.header("Server-Timing", headers.join(","));
     }
 
     // Calculate the duration, in nanoseconds …
@@ -71,7 +75,7 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   });
 
   // Can be used to add custom timing information
-  instance.decorateReply("setServerTiming", function(name, duration, description) {
+  instance.decorateReply("setServerTiming", function (name, duration, description) {
     // Reference to the res object storing values …
     const serverTiming = this.res[symbolServerTiming];
     // … return if value already exists (all subsequent occurrences MUST be ignored without signaling an error) …
