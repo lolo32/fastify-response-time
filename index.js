@@ -43,10 +43,10 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   opts.header = opts.header || "X-Response-Time";
 
   // Hook to be triggered on request (start time)
-  instance.addHook("onRequest", (req, res, next) => {
+  instance.addHook("onRequest", (request, reply, next) => {
     // Store the start timer in nanoseconds resolution
-    req[symbolRequestTime] = process.hrtime();
-    res[symbolServerTiming] = {};
+    request.req[symbolRequestTime] = process.hrtime();
+    reply.res[symbolServerTiming] = {};
 
     next();
   });
@@ -90,4 +90,4 @@ module.exports = fastifyPlugin((instance, opts, next) => {
 
   next();
   // Not before 0.31 (onSend hook added to this version)
-}, ">= 0.31");
+}, ">= 2");

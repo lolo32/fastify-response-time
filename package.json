@@ -24,7 +24,7 @@
     "header"
   ],
   "devDependencies": {
-    "fastify": "^1.13.1",
+    "fastify": "^2.0.0-rc.1",
     "request": "^2.81.0",
     "tap": "^12.1.0"
   },
