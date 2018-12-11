@@ -46,7 +46,7 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   instance.addHook("onRequest", (request, reply, next) => {
     // Store the start timer in nanoseconds resolution
     // istanbul ignore next
-    if (request.req) {
+    if (request.req && reply.res) {
       // support fastify >= v2
       request.req[symbolRequestTime] = process.hrtime();
       reply.res[symbolServerTiming] = {};
