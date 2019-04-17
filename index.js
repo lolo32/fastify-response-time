@@ -13,15 +13,15 @@ const symbolServerTiming = Symbol("ServerTiming");
  * @return {string}
  */
 const genTick = (name, duration, description) => {
-  let val = name;
-  // Parse duration. If could not be converted to float, does not add it
-  duration = parseFloat(duration);
-  if (!isNaN(duration)) {
-    val += `;dur=${duration}`;
-  }
-  // Parse the description. If empty, doest not add it. If string with space, double quote value
-  if ("string" === typeof description) {
-    val += `;desc=${description.includes(" ") ? `"${description}"` : description}`;
+        let val = name;
+        // Parse duration. If could not be converted to float, does not add it
+        duration = parseFloat(duration);
+        if (!isNaN(duration)) {
+            val += `;dur=${duration}`;
+        }
+        // Parse the description. If empty, doest not add it. If string with space, double quote value
+        if ("string" === typeof description) {
+            val += `;desc=${description.includes(" ") ? `"${description}"` : description}`;
   }
 
   return val;
@@ -46,9 +46,9 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   instance.addHook("onRequest", (request, reply, next) => {
     // Store the start timer in nanoseconds resolution
     // istanbul ignore next
-    if (request.req && reply.res) {
+    if (request.raw && reply.res) {
       // support fastify >= v2
-      request.req[symbolRequestTime] = process.hrtime();
+      request.raw[symbolRequestTime] = process.hrtime();
       reply.res[symbolServerTiming] = {};
     } else {
       request[symbolRequestTime] = process.hrtime();
@@ -72,7 +72,7 @@ module.exports = fastifyPlugin((instance, opts, next) => {
     }
 
     // Calculate the duration, in nanoseconds …
-    const hrDuration = process.hrtime(request.req[symbolRequestTime]);
+    const hrDuration = process.hrtime(request.raw[symbolRequestTime]);
     // … convert it to milliseconds …
     const duration = (hrDuration[0] * 1e3 + hrDuration[1] / 1e6).toFixed(opts.digits);
     // … add the header to the response
