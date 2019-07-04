@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "tap test.js --coverage --100",
-    "test:coverage": "tap test.js --coverage --100 --coverage-report=html"
+    "test:coverage": "tap test.js --coverage --100 --coverage-report=html",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "bugs": {
     "url": "https://github.com/lolo32/fastify-response-time/issues"
@@ -29,6 +31,8 @@
     "tap": "^12.1.0"
   },
   "dependencies": {
-    "fastify-plugin": "^1.3.0"
-  }
+    "fastify-plugin": "^1.3.0",
+    "snyk": "^1.189.0"
+  },
+  "snyk": true
 }
