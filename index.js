@@ -66,7 +66,7 @@ module.exports = fastifyPlugin((instance, opts, next) => {
     }
 
     // Calculate the duration, in nanoseconds …
-    const hrDuration = process.hrtime(request.req[symbolRequestTime]);
+    const hrDuration = process.hrtime(request[symbolRequestTime]);
     // … convert it to milliseconds …
     const duration = (hrDuration[0] * 1e3 + hrDuration[1] / 1e6).toFixed(opts.digits);
     // … add the header to the response
