@@ -46,14 +46,8 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   instance.addHook("onRequest", (request, reply, next) => {
     // Store the start timer in nanoseconds resolution
     // istanbul ignore next
-    if (request.req && reply.res) {
-      // support fastify >= v2
-      request.req[symbolRequestTime] = process.hrtime();
-      reply.res[symbolServerTiming] = {};
-    } else {
-      request[symbolRequestTime] = process.hrtime();
-      reply[symbolServerTiming] = {};
-    }
+    request[symbolRequestTime] = process.hrtime();
+    reply[symbolServerTiming] = {};
 
     next();
   });
@@ -62,7 +56,7 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   instance.addHook("onSend", (request, reply, payload, next) => {
 
     // check if Server-Timing need to be added
-    const serverTiming = reply.res[symbolServerTiming];
+    const serverTiming = reply[symbolServerTiming];
     const headers = [];
     for (const name of Object.keys(serverTiming)) {
       headers.push(serverTiming[name]);
@@ -84,7 +78,7 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   // Can be used to add custom timing information
   instance.decorateReply("setServerTiming", function (name, duration, description) {
     // Reference to the res object storing values …
-    const serverTiming = this.res[symbolServerTiming];
+    const serverTiming = this[symbolServerTiming];
     // … return if value already exists (all subsequent occurrences MUST be ignored without signaling an error) …
     if (serverTiming.hasOwnProperty(name)) {
       return false;
@@ -96,5 +90,4 @@ module.exports = fastifyPlugin((instance, opts, next) => {
   });
 
   next();
-  // Not before 0.31 (onSend hook added to this version)
-}, ">= 0.31");
+}, ">= 2.0");
