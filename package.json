@@ -1,6 +1,6 @@
 {
   "name": "fastify-response-time",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Add X-Response-Time header at each request (in ms) for Fastify",
   "main": "index.js",
   "scripts": {
@@ -26,6 +26,7 @@
   "devDependencies": {
     "fastify": ">=2.0.0",
     "request": "^2.81.0",
+    "sleep-promise": "^8.0.1",
     "tap": "^12.1.0"
   },
   "dependencies": {

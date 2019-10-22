@@ -89,5 +89,49 @@ module.exports = fastifyPlugin((instance, opts, next) => {
     return true;
   });
 
+  instance.decorateReply("asyncMeasureHr", async function (name, cb) {
+    const startHrTime = process.hrtime()
+
+    let result, error
+    try {
+      result = await cb()
+    } catch (err) {
+      error = err
+    }
+
+    const hrDuration = process.hrtime(startHrTime)
+    const duration = (hrDuration[0] * 1e3 + hrDuration[1] / 1e6).toFixed(2)
+
+    this.setServerTiming(name, duration)
+
+    if (error) {
+      throw error
+    }
+
+    return result
+  });
+
+  instance.decorateReply("syncMeasureHr", function (name, cb) {
+    const startHrTime = process.hrtime()
+
+    let result, error
+    try {
+      result = cb()
+    } catch (err) {
+      error = err
+    }
+
+    const hrDuration = process.hrtime(startHrTime)
+    const duration = (hrDuration[0] * 1e3 + hrDuration[1] / 1e6).toFixed(2)
+
+    this.setServerTiming(name, duration)
+
+    if (error) {
+      throw error
+    }
+
+    return result
+  });
+
   next();
 }, ">= 2.0");
