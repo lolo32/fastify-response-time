@@ -64,8 +64,11 @@ module.exports = fastifyPlugin((instance, opts, next) => {
     // check if Server-Timing need to be added
     const serverTiming = reply.res[symbolServerTiming];
     const headers = [];
-    for (const name of Object.keys(serverTiming)) {
-      headers.push(serverTiming[name]);
+    
+    if(serverTiming) {
+      for (const name of Object.keys(serverTiming)) {
+        headers.push(serverTiming[name]);
+      }
     }
     if (headers.length) {
       reply.header("Server-Timing", headers.join(","));
